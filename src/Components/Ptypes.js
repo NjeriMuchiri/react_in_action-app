@@ -2,10 +2,44 @@ import React, {Component} from 'react';
 import { render } from 'react-dom';
 import PropTypes from 'prop-types';
 
-
 const Ptypes = () =>{
 
     const node = document.getElementById('root');
+
+    const data = {
+    post: {
+        id:123,
+        content: 'What we hope to do with ease ,we must first learn to do with deligence. -Samuel Johnson',
+        user:'Mark Thomas',
+    },
+    comments: [
+        {
+            id:0,
+            user: 'David',
+            content: 'such a win',
+        },
+        {
+            id:1,
+            user: 'Haley',
+            content: 'Love it.',
+        },
+        {
+            id:2,
+            user: 'Peter',
+            content:'Who was Samuel Johnson?',
+        },
+        {
+            id:3,
+            user: 'Mitchell',
+            content: '@Peter get off letters and do your homework',
+        },
+        {
+            id:4,  
+            user: 'Peter',
+            content: '@mitchell ok:P',
+        },
+    ],
+};
     class Post extends Component{
         render() {
             return React.createElement(
@@ -61,7 +95,128 @@ const Ptypes = () =>{
             );
         }
     }
-    const App = React.createElement(Post,{
+    Comment.propTypes = {
+        id: PropTypes.number.isRequired,
+        content:PropTypes.string.isRequired,
+        user:PropTypes.string.isRequired
+    };
+    class CreateComment extends Component{
+        constructor(props) {
+            super(props);
+            this.state = {
+                content: '',
+                user: ''
+            };
+    this.handleUserChange = this.handleUserChange.bind(this);
+    this.handleTextChange = this.handleTextChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this)
+        }
+        handleUserChange(event){
+            const val = event.target.value
+            this.setState({
+             user: val
+                 
+            });
+        }
+        handleTextChange(event){
+            const val = event.target.value;
+            this.setState({
+                content: val
+            });
+        }
+        handleSubmit(event) {
+            event.preventDefault();
+            this.props.onCommentSubmit({
+                 user: this.state.user.trim(),
+                 content:this.state.content.trim()
+            });
+            this.setState(() =>({
+                user: '',
+                content: ''
+            }));
+        }
+        render(){
+            return React.createElement(
+           'form',
+           {
+               className: 'createComment',
+               onSubmit: this.handleSubmit
+           },
+           React.createElement('input', {
+               type: 'text',
+               placeholder:'Your Name...',
+               value: this.state.user,
+               onChange: this.handleUserChange
+           }),
+           React.createElement('input',{
+               type:'text',
+               placeholder: 'Your Thoughts?..',
+               value:this.state.content,
+               onChange: this.handleTextChange
+           }),
+           React.createElement('input',{
+               type:'submit',
+               value:'Post'
+           })
+            );
+        }
+    }
+    CreateComment.propTypes = {
+        onCommentSubmit:PropTypes.func.isRequired,
+        content: PropTypes.string
+    };
+    class CommentBox extends Component{
+        constructor(props){
+        super(props)
+        this.state = {
+            comments: this.props.comments
+        };
+        this.handleCommentSubmit = this.handleCommentSubmit.bind(this);
+        }
+        handleCommentSubmit(comment){
+            const comments = this.state.comments;
+            const newComments = comments.concat([comment]);
+            this.setState({
+                comments: newComments
+            });
+        }
+        render(){
+            return React.createElement(
+                'div',
+                {
+                    className: 'commentBox'
+                },
+                React.createElement(Post, {
+                    id: this.props.post.is,
+                    content:this.props.post.content,
+                    user:this.props.post.user
+                }),
+                this.state.comments.map(function(comment){
+                    return React.createElement(Comment,{
+                        key: comment.id,
+                        id:comment.id,
+                        content:comment.content,
+                        user: comment.user
+                    });
+                }),
+                React.createElement(CreateComment,{
+                    onCommentSubmit: this.handleCommentSubmit
+                })
+            );
+        }
+    }
+    CommentBox.propTypes = {
+        post: PropTypes.object,
+        comments: PropTypes.arrayOf(PropTypes.object)
+    };
+    render(
+        React.createElement(CommentBox, {
+            comments: data.comments,
+            post: data.post
+        }),
+        node
+    )
+    /* const App = React.createElement(Post,{
         id:1,
         content: 'said:This is a Post!',
         user: 'mark'
@@ -70,8 +225,9 @@ const Ptypes = () =>{
          id:2,
          user:'bob',
          content:'commented: wow! how cool!'
-     })
+     }),
+     React.createElement(CreateComment)
     );
-render(App, node);
+render(App, node); */
 }
 export default Ptypes;

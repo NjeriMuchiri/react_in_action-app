@@ -42,27 +42,13 @@ const Ptypes = () =>{
 };
     class Post extends Component{
         render() {
-            return React.createElement(
-                'div',
-                {
-                    className: 'post'
-                },
-                React.createElement(
-                    'h2',
-                    {
-                        className: 'postAuthor',
-                        id: this.props.id
-                    },
-                    this.props.user,
-                    React.createElement(
-                        'span',
-                        {
-                            className: 'postBody'
-                        },
-                        this.props.content
-                    ),
+            return (
+                <div className='post'>
+                <h2 className='postAuthor'>{this.props.user }</h2>
+                <span className='postBody'>{this.props.content}</span>
                     this.props.children
-                )
+                {this.props.children}
+                </div>
             );
         }
     }
@@ -73,25 +59,11 @@ const Ptypes = () =>{
     };
     class Comment extends Component{
         render(){
-            return React.createElement(
-                'div',
-                {
-                    className: 'comment'
-                },
-                React.createElement(
-                    'h2',
-                    {
-                        className: 'commentAuthor'
-                    },
-                    this.props.user,
-                    React.createElement(
-                        'span',
-                        {
-                            className: 'commentContent'
-                        },
-                        this.props.content
-                    )
-                )
+            return (
+               <div className='comment'>
+               <h2 className='commentAuthor'>{this.props.user + " : "}</h2>
+                <span className='commentContent'>{}this.props.content</span>
+                </div>
             );
         }
     }
@@ -136,28 +108,28 @@ const Ptypes = () =>{
             }));
         }
         render(){
-            return React.createElement(
-           'form',
-           {
-               className: 'createComment',
-               onSubmit: this.handleSubmit
-           },
-           React.createElement('input', {
-               type: 'text',
-               placeholder:'Your Name...',
-               value: this.state.user,
-               onChange: this.handleUserChange
-           }),
-           React.createElement('input',{
-               type:'text',
-               placeholder: 'Your Thoughts?..',
-               value:this.state.content,
-               onChange: this.handleTextChange
-           }),
-           React.createElement('input',{
-               type:'submit',
-               value:'Post'
-           })
+            return(
+           <form 
+           onSubmit={this.handleSubmit}className="createComment"
+           >
+           <input
+           value={this.state.user}
+           onChange={this.handleUserChange}
+           placeholder="Your name..."
+           type="text"
+           />
+           <input 
+           value={this.state.content}
+           onChange={this.handleTextChange}
+           placeholder="YourThought?.."
+           type="text"
+           />
+          <button 
+          type="submit"
+          >
+           Post
+          </button>
+           </form>
             );
         }
     }
@@ -182,26 +154,26 @@ const Ptypes = () =>{
         }
         render(){
             return React.createElement(
-                'div',
-                {
-                    className: 'commentBox'
-                },
-                React.createElement(Post, {
-                    id: this.props.post.is,
-                    content:this.props.post.content,
-                    user:this.props.post.user
-                }),
-                this.state.comments.map(function(comment){
-                    return React.createElement(Comment,{
-                        key: comment.id,
-                        id:comment.id,
-                        content:comment.content,
-                        user: comment.user
-                    });
-                }),
-                React.createElement(CreateComment,{
-                    onCommentSubmit: this.handleCommentSubmit
-                })
+                <div className='commentBox'>
+                    <Post 
+                    id={this.props.post.id}
+                    content={this.props.post.content}
+                    user={this.props.post.user}
+                    />
+                {this.state.comments.map(function(comment){
+                    return(
+                       < Comment
+                        key={comment.id}
+                        id={comment.id}
+                        content={comment.content}
+                        user ={ comment.user}
+                        />
+                    );
+                })},
+                <CreateComment 
+                onCommentSubmit={this.handleCommentSubmit}
+                />
+                </div>
             );
         }
     }
@@ -210,12 +182,12 @@ const Ptypes = () =>{
         comments: PropTypes.arrayOf(PropTypes.object)
     };
     render(
-        React.createElement(CommentBox, {
-            comments: data.comments,
-            post: data.post
-        }),
+        <CommentBox
+            comments={data.comments}
+            post={data.post}
+        />,
         node
-    )
+    );
     /* const App = React.createElement(Post,{
         id:1,
         content: 'said:This is a Post!',

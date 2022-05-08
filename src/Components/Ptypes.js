@@ -46,7 +46,6 @@ const Ptypes = () =>{
                 <div className='post'>
                 <h2 className='postAuthor'>{this.props.user }</h2>
                 <span className='postBody'>{this.props.content}</span>
-                    this.props.children
                 {this.props.children}
                 </div>
             );
@@ -62,7 +61,7 @@ const Ptypes = () =>{
             return (
                <div className='comment'>
                <h2 className='commentAuthor'>{this.props.user + " : "}</h2>
-                <span className='commentContent'>{}this.props.content</span>
+                <span className='commentContent'>{this.props.content}</span>
                 </div>
             );
         }
@@ -133,10 +132,10 @@ const Ptypes = () =>{
             );
         }
     }
-    CreateComment.propTypes = {
+    /* CreateComment.propTypes = {
         onCommentSubmit:PropTypes.func.isRequired,
         content: PropTypes.string
-    };
+    }; */
     class CommentBox extends Component{
         constructor(props){
         super(props)
@@ -147,13 +146,14 @@ const Ptypes = () =>{
         }
         handleCommentSubmit(comment){
             const comments = this.state.comments;
+            comment.id = Date.now();
             const newComments = comments.concat([comment]);
             this.setState({
                 comments: newComments
             });
         }
         render(){
-            return React.createElement(
+            return(
                 <div className='commentBox'>
                     <Post 
                     id={this.props.post.id}
@@ -164,7 +164,6 @@ const Ptypes = () =>{
                     return(
                        < Comment
                         key={comment.id}
-                        id={comment.id}
                         content={comment.content}
                         user ={ comment.user}
                         />
